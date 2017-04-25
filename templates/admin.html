@@ -1,0 +1,169 @@
+﻿{% extends "base.html" %}
+{% block title %}PI-ALARM ADMINISTRATOR{% endblock %}
+{% block content %}
+<div class="container-fluid">
+        <div class="block-header">
+            <h2>DASHBOARD</h2>
+        </div>
+      <div class="row clearfix">
+        <div id="danger" class="alert alert-danger" style="{{ '' if(errors) else 'display: none;' }}">
+            {{ errors }}
+        </div>
+        <div id="info" class="alert alert-info" style="display: none;">            
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="card">
+                <div class="header bg-cyan">
+                    <h2>
+                        <b>PI CONFIGURATION</b>
+                    </h2>
+                </div>
+                <div class="body">
+                    <h2 class="card-inside-title">Firebase</h2>
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="firebase_uri" value="{{ firebase_uri }}" class="form-control" placeholder="Firebase URI">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="username" value="{{ username }}" class="form-control" placeholder="Username">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="password" id="password" value="{{ password }}" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Music Player</h2>
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <form>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="music_folder" value="{{ music_folder }}" class="form-control" placeholder="Music Folder">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">                         
+                                    
+                                    <div id="nouislider_basic_example" class="noUi-target noUi-ltr noUi-horizontal noUi-connect">
+                                        <div class="noUi-base">
+                                            <div class="noUi-origin noUi-background" style="left: 30%;">
+                                                <div class="noUi-handle noUi-handle-lower"></div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-t-20 font-12"><b>Value: </b><span class="js-nouislider-value">30%</span></div>
+
+                                </div>
+                            </div>
+                            <div class="form-group text-right">
+                                <input type="button" id="save" class = "btn btn-primary waves-effect"" value="Save">
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="card">
+                    <div class="header bg-cyan">
+                        <h2>
+                            <b>ALARMS</b>
+                        </h2>
+                    </div>
+                    <div class="body table-responsive">
+                        <table id="alarms" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>NAME</th>
+                                    <th>TIME (hh24:mm:ss)</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alarm in alarms %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ alarm.name }}</td>
+                                        <td>{{ alarm.time }}</td>
+                                        <td>{{ alarm.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+      </div>
+</div>
+{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#save').click(function(){
+            var data = {
+                "firebase_uri" : $('#firebase_uri').val(),
+                "username" : $('#username').val(),
+                "password" : $('#password').val(),
+                "music_folder" : $('#music_folder').val()
+            };
+            console.log(data.firebase_uri);
+            $.ajax({
+              url: '/pi-config',
+              type: 'PUT',
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              success: function(data) {
+                $('.alert').hide();
+                getAlarms();
+                $('#info').html(data.success).show();
+                console.log(data.success);                
+              }
+            });
+        });
+
+        function getAlarms(){
+          console.log('getAlarms');
+          $.ajax({
+            url: '/alarms',
+            type: 'GET',
+            contentType: "application/json",
+            success: function(data)  {
+              if( 'errors' in data){
+                $('#danger').html(data.errors).show();
+              } else {
+                var tbody = '';
+                var i=1;
+                console.log(data);
+                for ( alarm of data ){
+                  console.log(alarm);
+                  tbody += '<tr>';
+                  tbody += '<td>' +i+ '</td>'
+                  tbody += '<td>'+ alarm.name + '</td>';
+                  tbody += '<td>' + alarm.time + '</td>';
+                  tbody += '<td>' + alarm.status + '</td>';
+                  tbody += '</tr>';
+                  i++;
+                }
+                $('#alarms tbody').html(tbody);
+              }
+            }
+          });
+        }
+
+        window.setInterval(function(){
+          getAlarms();
+        }, 5000);
+    });
+</script>
+{% endblock %}

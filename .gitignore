@@ -1,0 +1,8 @@
+run.sh
+test.sh
+config.js
+sftp-config.json
+config.backup.js
+static/node_modules/*
+static/node_modules.zip
+backup

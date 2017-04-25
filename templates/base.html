@@ -1,0 +1,28 @@
+{% include "header.html" %}
+{% include "footer.html" %}
+{% include "navbar.html" %}
+{% include "leftsidebar.html" %}
+{% include "rightsidebar.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block header %}{% endblock %}
+</head>
+
+<body class="theme-red">
+
+    {% block navbar %}{% endblock %}
+
+    <section>
+        {% block leftsidebar %}{% endblock %}
+        {% block rightsidebar %}{% endblock %}    
+    </section>
+
+    <section class="content">
+    {% block content %}{% endblock %}
+    </section>
+
+    {% block footer %}{% endblock %}
+    {% block pagejs %}{% endblock %}
+</body>
+</html>
