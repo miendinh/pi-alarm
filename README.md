@@ -8,9 +8,9 @@ Special thanks to **@nghnam** [https://github.com/nghnam/music-aekt](https://git
 
 # Requirements & Setup.
 ## Hardware
-Pi - 3 with Wi-Fi & audio support
+Pi - 3 with Wi-Fi & Audio support
 
-## Setup Environment
+## Setup Environment ( Ubuntu )
 ```
 sudo pip install Flask
 sudo pip install requests
@@ -20,7 +20,7 @@ sudo apt-get install moc
 ```
 
 ## Integrate with Hi-Morning
-* You can use [Hi-Morning](https://github.com/hi-morning/HiMorning) as a mobile controller app. Let's follow introduction of @thoqbk at [https://github.com/hi-morning/HiMorning](https://github.com/hi-morning/HiMorning)
+* You can use [Hi-Morning](https://github.com/hi-morning/HiMorning) as a mobile controller app. Let's follow introduction of **@thoqbk**
 
 * Pi-Alarm can run standalone as well through browser.
 
@@ -37,6 +37,16 @@ $ export FLASK_APP=app.py
 $ export FLASK_DEBUG=1
 $ flask run -h 127.0.0.1 -p 5000
 ```
+
+## Deploy with Gunicorn HTTP Server
+
+def app(environ, start_response):
+        data = b"Hello, World!\n"
+        start_response("200 OK", [
+            ("Content-Type", "text/plain"),
+            ("Content-Length", str(len(data)))
+        ])
+        return iter([data])
 
 #### Reference
 1. http://apscheduler.readthedocs.io/en/3.0/userguide.html
