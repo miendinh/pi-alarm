@@ -1,6 +1,6 @@
-import os
 import json
 import logging
+import os
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from firebase import firebase
@@ -13,6 +13,7 @@ logging.basicConfig()
 app = Flask(__name__, static_url_path='')
 scheduler = BackgroundScheduler()
 ALARMS = []
+
 
 @app.route('/js/<path:path>')
 def send_js(path):
@@ -58,6 +59,7 @@ def update_pi_config():
 
   return jsonify({'success': 'PI configuration is saved !'})
 
+
 @app.route('/player', methods=['PUT'])
 def control_player():
   cmd = request.json['cmd']
@@ -78,6 +80,7 @@ def control_player():
   elif cmd == 'vol-':
     moc.volume('down')
   return jsonify({'success': cmd + ' done !'})
+
 
 def syn_with_firebase():
   print 'sync with firebase...\n'
