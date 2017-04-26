@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 
@@ -5,7 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from firebase import firebase
 from flask import Flask, render_template, send_from_directory, jsonify, request
 
-from config import *
+from constant import *
 from player import moc
 
 logging.basicConfig()
@@ -26,15 +27,13 @@ def index():
       return render_template('admin.html',
                              username=config['username'],
                              password=config['password'],
-                             firebase_uri=config['firebase_uri'],
-                             music_folder=config['music_folder'])
+                             firebase_uri=config['firebase_uri'])
     except:
       if config:
         return render_template('admin.html',
                                username=config['username'],
                                password=config['password'],
                                firebase_uri=config['firebase_uri'],
-                               music_folder=config['music_folder'],
                                errors=ERRORS)
       else:
         return render_template('admin.html', errors=ERRORS)
@@ -52,14 +51,33 @@ def update_pi_config():
   config = {
     'username': js['username'],
     'password': js['password'],
-    'firebase_uri': js['firebase_uri'],
-    'music_folder': js['music_folder']
+    'firebase_uri': js['firebase_uri']
   }
   with open('config.js', 'w') as fp:
     json.dump(config, fp)
 
   return jsonify({'success': 'PI configuration is saved !'})
 
+@app.route('/player', methods=['PUT'])
+def control_player():
+  cmd = request.json['cmd']
+  if cmd == 'play':
+    moc.play()
+  elif cmd == 'stop':
+    moc.stop()
+  elif cmd == 'pause':
+    moc.pause()
+  elif cmd == 'unpause':
+    moc.unpause()
+  elif cmd == 'next':
+    moc.next_()
+  elif cmd == 'prev':
+    moc.prev()
+  elif cmd == 'vol+':
+    moc.volume('up')
+  elif cmd == 'vol-':
+    moc.volume('down')
+  return jsonify({'success': cmd + ' done !'})
 
 def syn_with_firebase():
   print 'sync with firebase...\n'
@@ -102,12 +120,11 @@ def play_music():
 
 def run_schedular():
   global scheduler
-  scheduler.add_job(syn_with_firebase, trigger='cron', month='*',
-                    day='*', hour='*',
-                    minute='*', second=TIME_PERIOR_SYNC_FIREBASE)
+  scheduler.add_job(syn_with_firebase, 'interval', seconds=TIME_PERIOR_SYNC_FIREBASE)
   scheduler.start()
 
 
 if __name__ == "__main__":
+  moc.mocp('-a', os.path.dirname(os.path.abspath(__file__)) + '/' + MUSIC_FOLDER)
   run_schedular()
   app.run(debug=DEBUG, host=HOST, port=PORT)

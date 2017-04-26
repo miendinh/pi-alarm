@@ -36,41 +36,36 @@
                                 <div class="form-line">
                                     <input type="password" id="password" value="{{ password }}" class="form-control" placeholder="Password">
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <h2 class="card-inside-title">Music Player</h2>
-                    <div class="row clearfix">
-                        <div class="col-sm-12">
-                            <form>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" id="music_folder" value="{{ music_folder }}" class="form-control" placeholder="Music Folder">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">                         
-                                    
-                                    <div id="nouislider_basic_example" class="noUi-target noUi-ltr noUi-horizontal noUi-connect">
-                                        <div class="noUi-base">
-                                            <div class="noUi-origin noUi-background" style="left: 30%;">
-                                                <div class="noUi-handle noUi-handle-lower"></div>
-                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="m-t-20 font-12"><b>Value: </b><span class="js-nouislider-value">30%</span></div>
-
-                                </div>
-                            </div>
+                            </div>                            
                             <div class="form-group text-right">
                                 <input type="button" id="save" class = "btn btn-primary waves-effect"" value="Save">
                             </div>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- end card -->
+            <!-- @card -->
+            <!-- player -->
+            <div class="card">
+                <div class="header bg-cyan">
+                    <h2>
+                        <b>Music Player</b>
+                    </h2>
+                </div>
+                <div class="body">
+                <div class="row clearfix">
+                    <div class="col-sm-12">
+                        <div class="form-group text-center">
+                            <button id="prev" type="button" class="btn btn-info"><i class="material-icons">navigate_before</i></button>
+                            <button id="stop" type="button" class="btn btn-danger"><i class="material-icons">stop</i></button>
+                            <button id="play" type="button" class="btn btn-primary"><i class="material-icons">play_circle_outline</i></button>
+                            <button id="next" type="button" class="btn btn-info"><i class="material-icons">navigate_next</i></button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- @player -->
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="card">
@@ -159,8 +154,52 @@
               }
             }
           });
-        }
+        };
 
+        function player(cmd){
+          console.log('control player : ' + cmd);
+          $.ajax({
+            url: '/player',
+            type: 'PUT',
+            contentType: "application/json",
+            data: JSON.stringify({'cmd': cmd}),
+            success: function(data)  {
+              console.log(data);
+            }
+          });
+        };
+
+        $("#prev").click(function(){
+            player('prev');
+        });
+
+        $("#stop").click(function(){
+            player('stop');
+            isPlay = true;
+            $('#play').children('.material-icons').html('play_circle_outline');
+        });
+
+        var isPlay = true;
+        $("#play").click(function(){
+            var icon = $(this).children('.material-icons');
+            var status = icon.html();
+            if (isPlay){
+                player('play');
+                isPlay = false;
+                icon.html('pause');
+            } else if (status == 'pause'){
+                icon.html('play_circle_outline');
+                player('pause');
+            } else {
+                icon.html('pause');
+                player('unpause');
+            }
+        });
+
+        $("#next").click(function(){
+            player('next');
+        });
+        
         window.setInterval(function(){
           getAlarms();
         }, 5000);

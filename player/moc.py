@@ -17,7 +17,6 @@ def mocp(*args):
     exit_code = e.returncode
   return output, exit_code
 
-
 def play():
   return mocp("-p")
 

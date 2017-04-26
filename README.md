@@ -40,13 +40,6 @@ $ flask run -h 127.0.0.1 -p 5000
 
 ## Deploy with Gunicorn HTTP Server
 
-def app(environ, start_response):
-        data = b"Hello, World!\n"
-        start_response("200 OK", [
-            ("Content-Type", "text/plain"),
-            ("Content-Length", str(len(data)))
-        ])
-        return iter([data])
 
 #### Reference
 1. http://apscheduler.readthedocs.io/en/3.0/userguide.html
