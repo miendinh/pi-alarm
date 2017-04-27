@@ -173,6 +173,10 @@
             player('prev');
         });
 
+        $("#next").click(function(){
+            player('next_');
+        });
+
         $("#stop").click(function(){
             player('stop');
             isPlay = true;
@@ -194,10 +198,6 @@
                 icon.html('pause');
                 player('unpause');
             }
-        });
-
-        $("#next").click(function(){
-            player('next');
         });
         
         window.setInterval(function(){

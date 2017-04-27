@@ -1,10 +1,10 @@
 # flask server
 DEBUG = True
-HOST = "192.168.16.134"
+HOST = "0.0.0.0"
 PORT = 8080
 
 # time to sync with firebase ( seconds )
-TIME_PERIOR_SYNC_FIREBASE = 60
+TIME_PERIOR_SYNC_FIREBASE = 15
 
 # play list folder
 MUSIC_FOLDER = 'musics'

@@ -63,22 +63,11 @@ def update_pi_config():
 @app.route('/player', methods=['PUT'])
 def control_player():
   cmd = request.json['cmd']
-  if cmd == 'play':
-    moc.play()
-  elif cmd == 'stop':
-    moc.stop()
-  elif cmd == 'pause':
-    moc.pause()
-  elif cmd == 'unpause':
-    moc.unpause()
-  elif cmd == 'next':
-    moc.next_()
-  elif cmd == 'prev':
-    moc.prev()
-  elif cmd == 'vol+':
-    moc.volume('up')
-  elif cmd == 'vol-':
-    moc.volume('down')
+  if cmd in ['play', 'stop', 'pause', 'unpause', 'next_', 'prev']:
+    getattr(moc, cmd)()
+  elif cmd in ['up', 'down']:
+    moc.volume(cmd)
+    
   return jsonify({'success': cmd + ' done !'})
 
 
