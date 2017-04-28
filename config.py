@@ -3,7 +3,7 @@ DEBUG = True
 HOST = "0.0.0.0"
 PORT = 8080
 
-# play list folder 
+# music folder
 MUSIC_FOLDER = 'musics'
 
 # running mode 
