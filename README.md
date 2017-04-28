@@ -35,7 +35,7 @@ DEBUG = True
 HOST = "0.0.0.0"
 PORT = 8080
 
-# play list folder
+# music folder
 MUSIC_FOLDER = 'musics'
 
 # running mode
@@ -50,7 +50,7 @@ FIREBASE_AUTH_PASSWORD = "pi-alram"
 ```
 
 ## Upload music 
-* Download and put mp3 files to Pi into MUSIC_FOLDER
+* Download mp3 files to Pi and and put them into MUSIC_FOLDER
 
 ## Run
 ```
