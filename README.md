@@ -2,7 +2,7 @@
 A tiny & cool application for Raspberry Pi 3 to alarm by playing music.
 Pi-Alarm is controlled by [Hi-Morning](https://github.com/hi-morning/HiMorning) (a mobile app) that uses google firebase to sync scheduler alarms between Pi & mobile. [Hi-Morning](https://github.com/hi-morning/HiMorning) is contributed by **@thoqbk**
 
-![](static/images/screenshot.png)
+![](static/images/screenshot.png =250x)
 
 Special thanks to **@nghnam** [https://github.com/nghnam/music-aekt](https://github.com/nghnam/music-aekt) for supporting a nice and concise Python Mocp Wrapper Utils, which uses to play music in Linux Terminal Command Line.
 
@@ -26,7 +26,7 @@ sudo apt-get install moc
 
 ## Update Pi-Alarm configuration
 ```
-$ nano constant.py
+$ nano config.py
 ```
 
 ```
@@ -49,7 +49,8 @@ FIREBASE_AUTH_PASSWORD = "pi-alram"
 .....
 ```
 
-## Upload music (mp3) to Pi into MUSIC_FOLDER
+## Upload music 
+* Download and put mp3 files to Pi into MUSIC_FOLDER
 
 ## Run
 ```
