@@ -1,8 +1,8 @@
 # Pi-Alarm
 A tiny & cool application for Raspberry Pi 3 to alarm by playing music.
-Pi-Alarm is controlled by [Hi-Morning](https://github.com/hi-morning/HiMorning) (a mobile app) that uses google firebase to sync scheduler alarms between Pi & mobile.
+Pi-Alarm is controlled by [Hi-Morning](https://github.com/hi-morning/HiMorning) (a mobile app) that uses google firebase to sync scheduler alarms between Pi & mobile. [Hi-Morning](https://github.com/hi-morning/HiMorning) is contributed by **@thoqbk**
 
-[Hi-Morning](https://github.com/hi-morning/HiMorning) is contributed by **@thoqbk**
+![](static/images/screenshot.png)
 
 Special thanks to **@nghnam** [https://github.com/nghnam/music-aekt](https://github.com/nghnam/music-aekt) for supporting a nice and concise Python Mocp Wrapper Utils, which uses to play music in Linux Terminal Command Line.
 
@@ -24,19 +24,38 @@ sudo apt-get install moc
 
 * Pi-Alarm can run standalone as well through browser.
 
+## Update Pi-Alarm configuration
+```
+$ nano constant.py
+```
+
+```
+# flask server
+DEBUG = True
+HOST = "0.0.0.0"
+PORT = 8080
+
+# play list folder
+MUSIC_FOLDER = 'musics'
+
+# running mode
+## Note : unsupport Standalone mode yet !
+STANDALONE = False
+
+# firebase authentication
+FIREBASE_URI = "https://pi-alrm.firebaseio.com"
+FIREBASE_AUTH_USERNAME = "pi-alarm"
+FIREBASE_AUTH_PASSWORD = "pi-alram"
+.....
+```
+
+## Upload music (mp3) to Pi into MUSIC_FOLDER
+
 ## Run
 ```
-$ export FLASK_APP=app.py
-$ flask run -h 127.0.0.1 -p 5000
+$ python app.py
 ```
-Open browser and go to: http://127.0.0.1:5000
-
-### Run with debug mode
-```
-$ export FLASK_APP=app.py
-$ export FLASK_DEBUG=1
-$ flask run -h 127.0.0.1 -p 5000
-```
+Open browser and go to: http://your_pi_ip:8080
 
 ## Deploy with Gunicorn HTTP Server
 

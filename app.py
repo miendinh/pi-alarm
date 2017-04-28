@@ -6,7 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from firebase import firebase
 from flask import Flask, render_template, send_from_directory, jsonify, request
 
-from constant import *
+from config import *
 from player import moc
 
 logging.basicConfig()
@@ -22,43 +22,14 @@ def send_js(path):
 
 @app.route('/')
 def index():
-  with open('config.js') as cf:
-    config = json.load(cf)
-    try:
-      return render_template('admin.html',
-                             username=config['username'],
-                             password=config['password'],
-                             firebase_uri=config['firebase_uri'])
-    except:
-      if config:
-        return render_template('admin.html',
-                               username=config['username'],
-                               password=config['password'],
-                               firebase_uri=config['firebase_uri'],
-                               errors=ERRORS)
-      else:
-        return render_template('admin.html', errors=ERRORS)
-
+  return render_template('admin.html', running_mode = STANDALONE,
+                                       firebase_uri = FIREBASE_URI, 
+                                       username = FIREBASE_AUTH_USERNAME)
 
 @app.route('/alarms', methods=['GET'])
 def alarms():
   global ALARMS
   return jsonify(ALARMS)
-
-
-@app.route('/pi-config', methods=['PUT'])
-def update_pi_config():
-  js = request.json
-  config = {
-    'username': js['username'],
-    'password': js['password'],
-    'firebase_uri': js['firebase_uri']
-  }
-  with open('config.js', 'w') as fp:
-    json.dump(config, fp)
-
-  return jsonify({'success': 'PI configuration is saved !'})
-
 
 @app.route('/player', methods=['PUT'])
 def control_player():
@@ -73,21 +44,18 @@ def control_player():
 
 def syn_with_firebase():
   print 'sync with firebase...\n'
-  with open('config.js') as cf:
-    global ALARMS
-    config = json.load(cf)
-    try:
-      fb = firebase.FirebaseApplication(config['firebase_uri'], None)
-      result = fb.get('/users', config['username'])
-      alarms = result['alarms']
-      if ALARMS != alarms:
-        print 'updated alarms !'
-        ALARMS = alarms
-        create_job_alarms()
-    except Exception, e:
-      print str(e)
-      print ERRORS
-
+  global ALARMS
+  try:
+    fb = firebase.FirebaseApplication(FIREBASE_URI, None)
+    result = fb.get('/users', FIREBASE_AUTH_USERNAME)
+    alarms = result['alarms']
+    if ALARMS != alarms:
+      print 'updated alarms !'
+      ALARMS = alarms
+      create_job_alarms()
+  except Exception, e:
+    print str(e)
+    print ERRORS
 
 def create_job_alarms():
   global scheduler

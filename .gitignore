@@ -7,3 +7,4 @@ config.backup.js
 static/node_modules/*
 static/node_modules.zip
 backup
+my.config.py
