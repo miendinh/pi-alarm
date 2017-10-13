@@ -45,7 +45,7 @@ STANDALONE = False
 # firebase authentication
 FIREBASE_URI = "https://pi-alrm.firebaseio.com"
 FIREBASE_AUTH_USERNAME = "pi-alarm"
-FIREBASE_AUTH_PASSWORD = "pi-alram"
+FIREBASE_AUTH_PASSWORD = "pi-alarm"
 .....
 ```
 
