@@ -49,6 +49,35 @@ FIREBASE_AUTH_PASSWORD = "pi-alarm"
 .....
 ```
 
+# You can define your own firebase database with the following structure
+```json
+{
+  "users": {
+    "pi-alarm": {
+      "alarms": [
+        {
+          "name": "coffee",
+          "status": "on",
+          "time": "22:51:50"
+        },
+        {
+          "name": "running",
+          "status": "on",
+          "time": "05:00:00"
+        },
+        {
+          "name": "check mail",
+          "status": "off",
+          "time": "09:00:00"
+        }
+      ],
+      "name": "Pi-Alarm"
+    }
+  }
+}    
+```
+
+
 ## Upload music 
 * Download mp3 files to Pi and and put them into MUSIC_FOLDER
 
